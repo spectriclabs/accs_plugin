@@ -1,0 +1,7 @@
+{
+  "prefix": "cssFilters",
+  "paths": {
+    "cssFilters": "."
+  },
+  "translations": ["translations/ja-JP.json"]
+}
