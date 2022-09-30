@@ -8,29 +8,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Redirect } from 'react-router-dom';
-import { I18nProvider } from '@kbn/i18n-react';
 import { AppMountParameters, CoreStart } from '../../../src/core/public';
 import { AppPluginStartDependencies } from './types';
-import { SearchExamplePage, ExampleLink } from './common/example_page';
-import { cssFiltersApp } from './search/app';
-import { SearchSessionsExampleApp } from './search_sessions/app';
-import { RedirectAppLinks } from '../../../src/plugins/kibana_react/public';
-
-const LINKS: ExampleLink[] = [
-  {
-    path: '/search',
-    title: 'Search',
-  },
-  {
-    path: '/search-sessions',
-    title: 'Search Sessions',
-  },
-  {
-    path: 'https://github.com/elastic/kibana/blob/main/src/plugins/data/README.mdx',
-    title: 'README (GitHub)',
-  },
-];
+import { CssFiltersApp } from './search/app';
 
 export const renderApp = (
   { notifications, savedObjects, http, application }: CoreStart,
@@ -38,32 +18,12 @@ export const renderApp = (
   { element, history }: AppMountParameters
 ) => {
   ReactDOM.render(
-    <I18nProvider>
-      <RedirectAppLinks application={application}>
-        <SearchExamplePage exampleLinks={LINKS} basePath={http.basePath}>
-          <Router history={history}>
-            <Route path={LINKS[0].path}>
-              <cssFiltersApp
-                notifications={notifications}
-                navigation={navigation}
-                data={data}
-                http={http}
-              />
-            </Route>
-            <Route path={LINKS[1].path}>
-              <SearchSessionsExampleApp
-                navigation={navigation}
-                notifications={notifications}
-                data={data}
-              />
-            </Route>
-            <Route path="/" exact={true}>
-              <Redirect to={LINKS[0].path} />
-            </Route>
-          </Router>
-        </SearchExamplePage>
-      </RedirectAppLinks>
-    </I18nProvider>,
+    <CssFiltersApp
+      notifications={notifications}
+      navigation={navigation}
+      data={data}
+      http={http}
+    />,
     element
   );
 

@@ -48,7 +48,7 @@ import type { DataViewField, DataView } from '../../../../src/plugins/data_views
 import { IMyStrategyResponse } from '../../common/types';
 import { AbortError } from '../../../../src/plugins/kibana_utils/common';
 
-interface cssFiltersAppDeps {
+interface CssFiltersAppDeps {
   notifications: CoreStart['notifications'];
   http: CoreStart['http'];
   navigation: NavigationPublicPluginStart;
@@ -80,12 +80,12 @@ function formatFieldsToComboBox(fields?: DataViewField[]) {
   });
 }
 
-export const cssFiltersApp = ({
+export const CssFiltersApp = ({
   http,
   notifications,
   navigation,
   data,
-}: cssFiltersAppDeps) => {
+}: CssFiltersAppDeps) => {
   const { IndexPatternSelect } = data.ui;
   const [getCool, setGetCool] = useState<boolean>(false);
   const [fibonacciN, setFibonacciN] = useState<number>(10);

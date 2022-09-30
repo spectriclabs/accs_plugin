@@ -9,6 +9,5 @@
   "server": true,
   "ui": true,
   "requiredPlugins": ["navigation", "data", "kibanaUtils", "share"],
-  "optionalPlugins": [],
-  "requiredBundles": ["kibanaReact"]
+  "optionalPlugins": []
  }

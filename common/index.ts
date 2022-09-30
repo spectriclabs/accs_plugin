@@ -7,6 +7,6 @@
  */
 
 export const PLUGIN_ID = 'cssFilters';
-export const PLUGIN_NAME = 'CCS Filters';
+export const PLUGIN_NAME = 'CSS Filters';
 
 export const SERVER_SEARCH_ROUTE_PATH = '/api/cssFilters';
