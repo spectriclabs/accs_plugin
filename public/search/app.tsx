@@ -11,27 +11,18 @@ import { i18n } from '@kbn/i18n';
 import { FormattedMessage } from '@kbn/i18n-react';
 
 import {
-  EuiButtonEmpty,
-  EuiCodeBlock,
   EuiPageBody,
   EuiPageContent,
   EuiPageContentBody,
   EuiPageHeader,
   EuiTitle,
-  EuiText,
   EuiFlexGrid,
   EuiFlexItem,
-  EuiCheckbox,
   EuiSpacer,
-  EuiCode,
-  EuiComboBox,
   EuiFormLabel,
-  EuiFieldNumber,
-  EuiProgress,
-  EuiTabbedContent,
-  EuiTabbedContentTab,
   EuiFormFieldset,
-  EuiSwitch
+  EuiSwitch,
+  EuiButton
 } from '@elastic/eui';
 
 import { CoreStart } from '../../../../src/core/public';
@@ -43,6 +34,7 @@ import {
   DataPublicPluginStart
 } from '../../../../src/plugins/data/public';
 import type { DataView } from '../../../../src/plugins/data_views/public';
+import { FilterStateStore } from '@kbn/es-query';
 
 interface CssFiltersAppDeps {
   notifications: CoreStart['notifications'];
@@ -61,6 +53,8 @@ export const CssFiltersApp = ({
   const [dataView, setDataView] = useState<DataView | null>();
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
+  const [hits, setHits] = useState<Array<Record<string, any>>>();
+
 
   const onChange1 = (e: {
     target: { checked: React.SetStateAction<boolean> };
@@ -72,6 +66,34 @@ export const CssFiltersApp = ({
     target: { checked: React.SetStateAction<boolean> };
   }) => {
     setChecked2(e.target.checked);
+  };
+
+  const onSearchHandled = async () => {
+    var title = dataView?.title;
+    const ogTitle = dataView?.title;
+    if(title?.startsWith('*:')){
+      const splitStr = title.split("*:");
+      const title1 = "c1-es:".concat(splitStr[1]);
+      const title2 = "c2-es:".concat(splitStr[1]);
+      if(checked1 && checked2){
+        title = title1.concat(",",title2)
+      }else if (checked1){
+        title = title1;
+      }else if (checked2){
+        title = title2;
+      }
+
+      dataView.title = title;
+
+    }
+    const searchSource = await data.search.searchSource.create();
+    const searchResponse = await searchSource
+      .setParent(undefined)
+      .setField('index',  dataView)
+      .fetch();
+
+      dataView.title = ogTitle;
+    setHits(searchResponse.hits.hits);
   };
 
   // Fetch the default data view using the `data.dataViews` service, as the component is mounted.
@@ -144,6 +166,14 @@ export const CssFiltersApp = ({
             <EuiFlexItem>
               {showSwitch(dataView)}
             </EuiFlexItem>
+            <EuiFlexItem>
+              <EuiButton type="primary" size="s" onClick={onSearchHandled}>
+                Search data
+              </EuiButton>
+            </EuiFlexItem>
+          </EuiFlexGrid>
+          <EuiFlexGrid columns={1} >
+            {JSON.stringify(hits,null,2)}
           </EuiFlexGrid>
         </EuiPageContentBody>
       </EuiPageContent>
