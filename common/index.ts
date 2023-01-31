@@ -6,7 +6,7 @@
  * Side Public License, v 1.
  */
 
-export const PLUGIN_ID = 'cssFilters';
-export const PLUGIN_NAME = 'CSS Filters';
+export const PLUGIN_ID = 'ccsFilters';
+export const PLUGIN_NAME = 'CCS Filters';
 
-export const SERVER_SEARCH_ROUTE_PATH = '/api/cssFilters';
+export const SERVER_SEARCH_ROUTE_PATH = '/api/ccsFilters';

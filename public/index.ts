@@ -8,11 +8,11 @@
 
 import './index.scss';
 
-import { cssFiltersPlugin } from './plugin';
+import { ccsFiltersPlugin } from './plugin';
 
 // This exports static code and TypeScript types,
 // as well as, Kibana Platform `plugin()` initializer.
 export function plugin() {
-  return new cssFiltersPlugin();
+  return new ccsFiltersPlugin();
 }
-export type { cssFiltersPluginSetup, cssFiltersPluginStart } from './types';
+export type { ccsFiltersPluginSetup, ccsFiltersPluginStart } from './types';

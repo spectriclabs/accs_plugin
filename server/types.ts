@@ -9,15 +9,15 @@
 // Rename PluginStart to something better
 import { PluginSetup, PluginStart } from '../../../src/plugins/data/server';
 
-export interface cssFiltersPluginSetupDeps {
+export interface ccsFiltersPluginSetupDeps {
   data: PluginSetup;
 }
 
-export interface cssFiltersPluginStartDeps {
+export interface ccsFiltersPluginStartDeps {
   data: PluginStart;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface cssFiltersPluginSetup {}
+export interface ccsFiltersPluginSetup {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface cssFiltersPluginStart {}
+export interface ccsFiltersPluginStart {}

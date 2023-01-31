@@ -36,19 +36,19 @@ import {
 import type { DataView } from '../../../../src/plugins/data_views/public';
 import { FilterStateStore } from '@kbn/es-query';
 
-interface CssFiltersAppDeps {
+interface CcsFiltersAppDeps {
   notifications: CoreStart['notifications'];
   http: CoreStart['http'];
   navigation: NavigationPublicPluginStart;
   data: DataPublicPluginStart;
 }
 
-export const CssFiltersApp = ({
+export const CcsFiltersApp = ({
   http,
   notifications,
   navigation,
   data,
-}: CssFiltersAppDeps) => {
+}: CcsFiltersAppDeps) => {
   const { IndexPatternSelect } = data.ui;
   const [dataView, setDataView] = useState<DataView | null>();
   const [checked1, setChecked1] = useState(false);
@@ -128,7 +128,7 @@ export const CssFiltersApp = ({
         <EuiTitle size="l">
           <h1>
             <FormattedMessage
-              id="cssFilters.helloWorldText"
+              id="ccsFilters.helloWorldText"
               defaultMessage="{name}"
               values={{ name: PLUGIN_NAME }}
             />

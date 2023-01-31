@@ -10,7 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppMountParameters, CoreStart } from '../../../src/core/public';
 import { AppPluginStartDependencies } from './types';
-import { CssFiltersApp } from './search/app';
+import { CcsFiltersApp } from './search/app';
 
 export const renderApp = (
   { notifications, savedObjects, http, application }: CoreStart,
@@ -18,7 +18,7 @@ export const renderApp = (
   { element, history }: AppMountParameters
 ) => {
   ReactDOM.render(
-    <CssFiltersApp
+    <CcsFiltersApp
       notifications={notifications}
       navigation={navigation}
       data={data}

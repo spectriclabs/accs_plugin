@@ -7,10 +7,10 @@
  */
 
 import { PluginInitializerContext } from '../../../src/core/server';
-import { cssFiltersPlugin } from './plugin';
+import { ccsFiltersPlugin } from './plugin';
 
 export function plugin(initializerContext: PluginInitializerContext) {
-  return new cssFiltersPlugin(initializerContext);
+  return new ccsFiltersPlugin(initializerContext);
 }
 
-export type { cssFiltersPluginSetup, cssFiltersPluginStart } from './types';
+export type { ccsFiltersPluginSetup, ccsFiltersPluginStart } from './types';

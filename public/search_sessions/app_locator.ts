@@ -67,7 +67,7 @@ export class SearchSessionsExamplesAppLocatorDefinition
     );
 
     return {
-      app: 'cssFilters',
+      app: 'ccsFilters',
       path: url,
       state: {},
     };

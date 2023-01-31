@@ -16,17 +16,17 @@ import {
 import {
   AppPluginSetupDependencies,
   AppPluginStartDependencies,
-  cssFiltersPluginSetup,
-  cssFiltersPluginStart,
+  ccsFiltersPluginSetup,
+  ccsFiltersPluginStart,
 } from './types';
 import { SearchSessionsExamplesAppLocatorDefinition } from './search_sessions/app_locator';
 import { PLUGIN_NAME } from '../common';
 
-export class cssFiltersPlugin
+export class ccsFiltersPlugin
   implements
     Plugin<
-      cssFiltersPluginSetup,
-      cssFiltersPluginStart,
+      ccsFiltersPluginSetup,
+      ccsFiltersPluginStart,
       AppPluginSetupDependencies,
       AppPluginStartDependencies
     >
@@ -34,11 +34,11 @@ export class cssFiltersPlugin
   public setup(
     core: CoreSetup<AppPluginStartDependencies>,
     { share }: AppPluginSetupDependencies
-  ): cssFiltersPluginSetup {
-    console.log("Registering cssFilters")
+  ): ccsFiltersPluginSetup {
+    console.log("Registering ccsFilters")
     // Register an application into the side navigation menu
     core.application.register({
-      id: 'cssFilters',
+      id: 'ccsFilters',
       title: PLUGIN_NAME,
       navLinkStatus: AppNavLinkStatus.visible,
       mount: async (params: AppMountParameters) => {
@@ -59,7 +59,7 @@ export class cssFiltersPlugin
     return {};
   }
 
-  public start(core: CoreStart): cssFiltersPluginStart {
+  public start(core: CoreStart): ccsFiltersPluginStart {
     return {};
   }
 

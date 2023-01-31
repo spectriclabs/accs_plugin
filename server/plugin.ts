@@ -17,22 +17,22 @@ import type {
 import type { DataRequestHandlerContext } from 'src/plugins/data/server';
 
 import {
-  cssFiltersPluginSetup,
-  cssFiltersPluginStart,
-  cssFiltersPluginSetupDeps,
-  cssFiltersPluginStartDeps,
+  ccsFiltersPluginSetup,
+  ccsFiltersPluginStart,
+  ccsFiltersPluginSetupDeps,
+  ccsFiltersPluginStartDeps,
 } from './types';
 import { mySearchStrategyProvider } from './my_strategy';
 import { registerRoutes } from './routes';
 import { fibonacciStrategyProvider } from './fibonacci_strategy';
 
-export class cssFiltersPlugin
+export class ccsFiltersPlugin
   implements
     Plugin<
-      cssFiltersPluginSetup,
-      cssFiltersPluginStart,
-      cssFiltersPluginSetupDeps,
-      cssFiltersPluginStartDeps
+      ccsFiltersPluginSetup,
+      ccsFiltersPluginStart,
+      ccsFiltersPluginSetupDeps,
+      ccsFiltersPluginStartDeps
     >
 {
   private readonly logger: Logger;
@@ -42,8 +42,8 @@ export class cssFiltersPlugin
   }
 
   public setup(
-    core: CoreSetup<cssFiltersPluginStartDeps>,
-    deps: cssFiltersPluginSetupDeps
+    core: CoreSetup<ccsFiltersPluginStartDeps>,
+    deps: ccsFiltersPluginSetupDeps
   ) {
     this.logger.debug('search_examples: Setup');
     const router = core.http.createRouter<DataRequestHandlerContext>();
