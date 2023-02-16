@@ -6,6 +6,7 @@
  * Side Public License, v 1.
  */
 
+import { UnifiedSearchPublicPluginStart } from '@kbn/unified-search-plugin/public';
 import { NavigationPublicPluginStart } from '../../../src/plugins/navigation/public';
 import { DataPublicPluginStart } from '../../../src/plugins/data/public';
 import { SharePluginSetup } from '../../../src/plugins/share/public';
@@ -22,4 +23,5 @@ export interface AppPluginSetupDependencies {
 export interface AppPluginStartDependencies {
   navigation: NavigationPublicPluginStart;
   data: DataPublicPluginStart;
+  unifiedSearch: UnifiedSearchPublicPluginStart;
 }

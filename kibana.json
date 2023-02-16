@@ -8,6 +8,6 @@
   "description": "Displays the different remote clusters and allows user to choose which one they want to include in their query",
   "server": true,
   "ui": true,
-  "requiredPlugins": ["navigation", "data", "kibanaUtils", "share"],
+  "requiredPlugins": ["navigation", "data", "kibanaUtils", "share", "unifiedSearch"],
   "optionalPlugins": []
  }

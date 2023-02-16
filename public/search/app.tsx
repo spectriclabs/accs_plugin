@@ -25,22 +25,22 @@ import {
   EuiButton
 } from '@elastic/eui';
 
+import { UnifiedSearchPublicPluginStart } from '@kbn/unified-search-plugin/public';
+import { FilterStateStore } from '@kbn/es-query';
 import { CoreStart } from '../../../../src/core/public';
 import { NavigationPublicPluginStart } from '../../../../src/plugins/navigation/public';
 
 import { PLUGIN_ID, PLUGIN_NAME } from '../../common';
 
-import {
-  DataPublicPluginStart
-} from '../../../../src/plugins/data/public';
-import type { DataView } from '../../../../src/plugins/data_views/public';
-import { FilterStateStore } from '@kbn/es-query';
+import { DataPublicPluginStart } from '../../../../src/plugins/data/public';
+import type { DataViewField, DataView } from '../../../../src/plugins/data_views/public';
 
 interface CcsFiltersAppDeps {
   notifications: CoreStart['notifications'];
   http: CoreStart['http'];
   navigation: NavigationPublicPluginStart;
   data: DataPublicPluginStart;
+  unifiedSearch: UnifiedSearchPublicPluginStart;
 }
 
 export const CcsFiltersApp = ({
@@ -48,38 +48,37 @@ export const CcsFiltersApp = ({
   notifications,
   navigation,
   data,
+  unifiedSearch,
 }: CcsFiltersAppDeps) => {
-  const { IndexPatternSelect } = data.ui;
+  const { IndexPatternSelect } = unifiedSearch.ui;
   const [dataView, setDataView] = useState<DataView | null>();
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [hits, setHits] = useState<Array<Record<string, any>>>();
 
-
-  const onChange1 = (e: {
-    target: { checked: React.SetStateAction<boolean> };
-  }) => {
+  const onChange1 = (e: { target: { checked: React.SetStateAction<boolean> } }) => {
     setChecked1(e.target.checked);
   };
 
-  const onChange2 = (e: {
-    target: { checked: React.SetStateAction<boolean> };
-  }) => {
+  const onChange2 = (e: { target: { checked: React.SetStateAction<boolean> } }) => {
     setChecked2(e.target.checked);
   };
 
   const onSearchHandled = async () => {
-    var title = dataView?.title;
+    if ( !dataView ){
+      return;
+    }
+    let title = dataView?.title;
     const ogTitle = dataView?.title;
-    if(title?.startsWith('*:')){
-      const splitStr = title.split("*:");
-      const title1 = "c1-es:".concat(splitStr[1]);
-      const title2 = "c2-es:".concat(splitStr[1]);
-      if(checked1 && checked2){
-        title = title1.concat(",",title2)
-      }else if (checked1){
+    if (title?.startsWith('*:')) {
+      const splitStr = title.split('*:');
+      const title1 = 'c1-es:'.concat(splitStr[1]);
+      const title2 = 'c2-es:'.concat(splitStr[1]);
+      if (checked1 && checked2) {
+        title = title1.concat(',', title2);
+      } else if (checked1) {
         title = title1;
-      }else if (checked2){
+      } else if (checked2) {
         title = title2;
       }
 
@@ -106,8 +105,7 @@ export const CcsFiltersApp = ({
     setDefaultDataView();
   }, [data]);
 
-
-  function showSwitch(data:DataView) {
+  function showSwitch(data: DataView) {
     console.log(data)
     if (data === undefined){
       return

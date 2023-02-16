@@ -14,7 +14,7 @@ import { CcsFiltersApp } from './search/app';
 
 export const renderApp = (
   { notifications, savedObjects, http, application }: CoreStart,
-  { data, navigation }: AppPluginStartDependencies,
+  { data, navigation, unifiedSearch }: AppPluginStartDependencies,
   { element, history }: AppMountParameters
 ) => {
   ReactDOM.render(
@@ -23,6 +23,7 @@ export const renderApp = (
       navigation={navigation}
       data={data}
       http={http}
+      unifiedSearch={unifiedSearch}
     />,
     element
   );
