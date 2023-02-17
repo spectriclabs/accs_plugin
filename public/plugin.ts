@@ -19,7 +19,6 @@ import {
   ccsFiltersPluginSetup,
   ccsFiltersPluginStart,
 } from './types';
-import { SearchSessionsExamplesAppLocatorDefinition } from './search_sessions/app_locator';
 import { PLUGIN_NAME } from '../common';
 
 export class ccsFiltersPlugin
@@ -50,12 +49,6 @@ export class ccsFiltersPlugin
         return renderApp(coreStart, depsStart, params);
       },
     });
-
-    // we need an locator for search session examples for restoring a search session
-    const getAppBasePath = () =>
-      core.getStartServices().then(([coreStart]) => coreStart.http.basePath.get());
-    share.url.locators.create(new SearchSessionsExamplesAppLocatorDefinition(getAppBasePath));
-
     return {};
   }
 
