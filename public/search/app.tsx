@@ -26,6 +26,7 @@ import {
 } from '@elastic/eui';
 
 import { UnifiedSearchPublicPluginStart } from '@kbn/unified-search-plugin/public';
+import { RemoteClustersPluginSetup } from '@kbn/remote-clusters-plugin/public'; 
 import { FilterStateStore } from '@kbn/es-query';
 import { CoreStart } from '../../../../src/core/public';
 import { NavigationPublicPluginStart } from '../../../../src/plugins/navigation/public';
@@ -41,6 +42,7 @@ interface CcsFiltersAppDeps {
   navigation: NavigationPublicPluginStart;
   data: DataPublicPluginStart;
   unifiedSearch: UnifiedSearchPublicPluginStart;
+  remoteClusters: RemoteClustersPluginSetup; 
 }
 
 export const CcsFiltersApp = ({
@@ -49,6 +51,7 @@ export const CcsFiltersApp = ({
   navigation,
   data,
   unifiedSearch,
+  remoteClusters
 }: CcsFiltersAppDeps) => {
   const { IndexPatternSelect } = unifiedSearch.ui;
   const [dataView, setDataView] = useState<DataView | null>();
@@ -106,6 +109,7 @@ export const CcsFiltersApp = ({
   }, [data]);
 
   function showSwitch(data: DataView) {
+    console.log(remoteClusters)
     console.log(data)
     if (data === undefined){
       return

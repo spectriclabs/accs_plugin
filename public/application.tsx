@@ -14,7 +14,7 @@ import { CcsFiltersApp } from './search/app';
 
 export const renderApp = (
   { notifications, savedObjects, http, application }: CoreStart,
-  { data, navigation, unifiedSearch }: AppPluginStartDependencies,
+  { data, navigation, unifiedSearch, remoteClusters }: AppPluginStartDependencies,
   { element, history }: AppMountParameters
 ) => {
   ReactDOM.render(
@@ -24,6 +24,7 @@ export const renderApp = (
       data={data}
       http={http}
       unifiedSearch={unifiedSearch}
+      remoteClusters={remoteClusters}
     />,
     element
   );

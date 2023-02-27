@@ -10,6 +10,7 @@ import { UnifiedSearchPublicPluginStart } from '@kbn/unified-search-plugin/publi
 import { NavigationPublicPluginStart } from '../../../src/plugins/navigation/public';
 import { DataPublicPluginStart } from '../../../src/plugins/data/public';
 import { SharePluginSetup } from '../../../src/plugins/share/public';
+import { RemoteClustersPluginSetup } from '@kbn/remote-clusters-plugin/public'; 
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ccsFiltersPluginSetup {}
@@ -24,4 +25,5 @@ export interface AppPluginStartDependencies {
   navigation: NavigationPublicPluginStart;
   data: DataPublicPluginStart;
   unifiedSearch: UnifiedSearchPublicPluginStart;
+  remoteClusters: RemoteClustersPluginSetup;
 }

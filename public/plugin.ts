@@ -20,6 +20,7 @@ import {
   ccsFiltersPluginStart,
 } from './types';
 import { PLUGIN_NAME } from '../common';
+import { IEsSearchRequest, ISearchRequestParams } from '@kbn/data-plugin/common';
 
 export class ccsFiltersPlugin
   implements
@@ -45,6 +46,12 @@ export class ccsFiltersPlugin
         const { renderApp } = await import('./application');
         // Get start services as specified in kibana.json
         const [coreStart, depsStart] = await core.getStartServices();
+        depsStart.data.search.searchInterceptor.addPreSearchHook(function (request:IEsSearchRequest){
+  
+          console.log(request)
+          request.params.size = 1;
+          return request;
+        });
         // Render the application
         return renderApp(coreStart, depsStart, params);
       },

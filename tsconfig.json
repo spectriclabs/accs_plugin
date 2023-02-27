@@ -19,6 +19,7 @@
     { "path": "../../src/plugins/kibana_utils/tsconfig.json" },
     { "path": "../../src/plugins/kibana_react/tsconfig.json" },
     { "path": "../../src/plugins/navigation/tsconfig.json" },
-    { "path": "../../src/plugins/share/tsconfig.json" }
+    { "path": "../../src/plugins/share/tsconfig.json" },
+    { "path": "../../x-pack/plugins/remote_clusters/tsconfig.json" }
   ]
 }

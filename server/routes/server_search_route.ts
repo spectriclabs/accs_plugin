@@ -18,60 +18,17 @@ export function registerServerSearchRoute(router: IRouter<DataRequestHandlerCont
   router.get(
     {
       path: SERVER_SEARCH_ROUTE_PATH,
-      validate: {
-        query: schema.object({
-          index: schema.maybe(schema.string()),
-          field: schema.maybe(schema.string()),
-        }),
-      },
+      validate: false
+
     },
     async (context, request, response) => {
-      const { index, field } = request.query;
 
-      // User may abort the request without waiting for the results
-      // we need to handle this scenario by aborting underlying server requests
-      const abortSignal = getRequestAbortedSignal(request.events.aborted$);
-
-      try {
-        const res = await context
-          .search!.search(
-            {
-              params: {
-                index,
-                body: {
-                  aggs: {
-                    '1': {
-                      avg: {
-                        field,
-                      },
-                    },
-                  },
-                },
-              },
-            } as IEsSearchRequest,
-            { abortSignal }
-          )
-          .toPromise();
-
-        return response.ok({
-          body: {
-            aggs: (res as IEsSearchResponse).rawResponse.aggregations,
-          },
-        });
-      } catch (e) {
-        return response.customError({
-          statusCode: e.statusCode ?? 500,
-          body: {
-            message: e.message,
-          },
-        });
-      }
+      const { client: clusterClient } = (await context.core).elasticsearch;      
+      const info = await clusterClient.asCurrentUser.cluster.remoteInfo();   
+      let infoArray = Object.keys(info).map(name => ({name,connected:info[name].connected}))
+      return response.ok({body:infoArray})
+      
     }
   );
 }
 
-function getRequestAbortedSignal(aborted$: Observable<void>): AbortSignal {
-  const controller = new AbortController();
-  aborted$.subscribe(() => controller.abort());
-  return controller.signal;
-}
