@@ -7,7 +7,6 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { i18n } from '@kbn/i18n';
 import { FormattedMessage } from '@kbn/i18n-react';
 
 import {
@@ -19,22 +18,17 @@ import {
   EuiFlexGrid,
   EuiFlexItem,
   EuiSpacer,
-  EuiFormLabel,
   EuiFormFieldset,
-  EuiSwitch,
-  EuiButton
+  EuiSwitch
 } from '@elastic/eui';
 
 import { UnifiedSearchPublicPluginStart } from '@kbn/unified-search-plugin/public';
-import { RemoteClustersPluginSetup } from '@kbn/remote-clusters-plugin/public'; 
-import { FilterStateStore } from '@kbn/es-query';
 import { CoreStart } from '../../../../src/core/public';
 import { NavigationPublicPluginStart } from '../../../../src/plugins/navigation/public';
 
-import { PLUGIN_ID, PLUGIN_NAME } from '../../common';
+import { IsRemoteSelected, PLUGIN_NAME, RemoteInfo, SERVER_REMOTE_INFO_ROUTE_PATH } from '../../common';
 
 import { DataPublicPluginStart } from '../../../../src/plugins/data/public';
-import type { DataViewField, DataView } from '../../../../src/plugins/data_views/public';
 
 interface CcsFiltersAppDeps {
   notifications: CoreStart['notifications'];
@@ -42,7 +36,6 @@ interface CcsFiltersAppDeps {
   navigation: NavigationPublicPluginStart;
   data: DataPublicPluginStart;
   unifiedSearch: UnifiedSearchPublicPluginStart;
-  remoteClusters: RemoteClustersPluginSetup; 
 }
 
 export const CcsFiltersApp = ({
@@ -51,79 +44,90 @@ export const CcsFiltersApp = ({
   navigation,
   data,
   unifiedSearch,
-  remoteClusters
 }: CcsFiltersAppDeps) => {
-  const { IndexPatternSelect } = unifiedSearch.ui;
-  const [dataView, setDataView] = useState<DataView | null>();
-  const [checked1, setChecked1] = useState(false);
-  const [checked2, setChecked2] = useState(false);
-  const [hits, setHits] = useState<Array<Record<string, any>>>();
 
-  const onChange1 = (e: { target: { checked: React.SetStateAction<boolean> } }) => {
-    setChecked1(e.target.checked);
+  var [selectedRemotes, setSelected] = useState<IsRemoteSelected>({});
+  const [remoteInfo, setRemoteInfo] = useState<RemoteInfo[]>();
+
+  /**
+   * Chages the state of the switch when clicked 
+   * @param e click action object
+   * @param switchLabel name of the switch on which the action was performed 
+   */
+  const onChange = (e: { target: { checked: boolean } }, switchLabel: string) => {
+
+    setSelected({ ...selectedRemotes, [switchLabel]: e.target.checked });
+
+  }
+  /**
+   * asynchronous request to get the list of remote clusters 
+   */
+  const getCluster = async () => {
+    try {
+      const res: RemoteInfo[] = await http.get(SERVER_REMOTE_INFO_ROUTE_PATH);
+      setRemoteInfo(res);
+
+    } catch (e) {
+      if (e?.name === 'AbortError') {
+        notifications.toasts.addWarning({
+          title: e.message,
+        });
+      } else {
+        notifications.toasts.addDanger({
+          title: 'Failed to get cluster information',
+          text: e.message,
+        });
+      }
+    }
   };
 
-  const onChange2 = (e: { target: { checked: React.SetStateAction<boolean> } }) => {
-    setChecked2(e.target.checked);
-  };
 
-  const onSearchHandled = async () => {
-    if ( !dataView ){
+  /**
+   * Get the cluster information once when the application loads 
+   */
+  useEffect(() => {
+    getCluster()
+  }, [])
+
+
+  /**
+   * Gets the checkedItems save on localstorage once when the application loads
+   */
+  useEffect(() => {
+    setSelected(JSON.parse((window.localStorage.getItem('selectedRemotes') as string)));
+  }, []);
+
+  /**
+   * Save checkedItems to locastorage everytime they are updated
+   */
+  useEffect(() => {
+    if (selectedRemotes === undefined || selectedRemotes === null || JSON.stringify(selectedRemotes) === '{}') {
       return;
     }
-    let title = dataView?.title;
-    const ogTitle = dataView?.title;
-    if (title?.startsWith('*:')) {
-      const splitStr = title.split('*:');
-      const title1 = 'c1-es:'.concat(splitStr[1]);
-      const title2 = 'c2-es:'.concat(splitStr[1]);
-      if (checked1 && checked2) {
-        title = title1.concat(',', title2);
-      } else if (checked1) {
-        title = title1;
-      } else if (checked2) {
-        title = title2;
-      }
+    window.localStorage.setItem('selectedRemotes', JSON.stringify(selectedRemotes));
 
-      dataView.title = title;
+  }, [selectedRemotes])
 
-    }
-    const searchSource = await data.search.searchSource.create();
-    const searchResponse = await searchSource
-      .setParent(undefined)
-      .setField('index',  dataView)
-      .fetch();
-
-      dataView.title = ogTitle;
-    setHits(searchResponse.hits.hits);
-  };
-
-  // Fetch the default data view using the `data.dataViews` service, as the component is mounted.
-  useEffect(() => {
-    const setDefaultDataView = async () => {
-      const defaultDataView = await data.dataViews.getDefault();
-      setDataView(defaultDataView);
-    };
-
-    setDefaultDataView();
-  }, [data]);
-
-  function showSwitch(data: DataView) {
-    console.log(remoteClusters)
-    console.log(data)
-    if (data === undefined){
-      return
-    }else if(data.title.startsWith("*:")){
-      return (
-        <EuiFormFieldset legend={{ children: 'Remote Clusters' }}>
-        <EuiSwitch label="c1-es" onChange={onChange1} checked={checked1} />
+  /**
+   * Function use to genere a switch based on the RemoteInfo passed in 
+   * @param obj RemoteInfo object use to generate the selection switch 
+   * @returns 
+   */
+  function makeSwith(obj: RemoteInfo) {
+    return (
+      <div>
+        <EuiSwitch
+          label={obj.name}
+          id={obj.name}
+          onChange={e => onChange(e, obj.name)}
+          checked={selectedRemotes? selectedRemotes[obj.name] : false}
+        />
         <EuiSpacer size="s" />
-        <EuiSwitch label="c2-es" onChange={onChange2} checked={checked2} />
-      </EuiFormFieldset>
-      )
-    }
-    
+      </div>
+
+    )
   }
+
   return (
     <EuiPageBody>
       <EuiPageHeader>
@@ -139,43 +143,12 @@ export const CcsFiltersApp = ({
       </EuiPageHeader>
       <EuiPageContent>
         <EuiPageContentBody>
-          <navigation.ui.TopNavMenu
-            appName={PLUGIN_ID}
-            showSearchBar={true}
-            useDefaultBehaviors={true}
-            indexPatterns={dataView ? [dataView] : undefined}
-          />
           <EuiFlexGrid columns={4}>
             <EuiFlexItem>
-              <EuiFormLabel>Data view</EuiFormLabel>
-              <IndexPatternSelect
-                placeholder={i18n.translate('searchSessionExample.selectDataViewPlaceholder', {
-                  defaultMessage: 'Select data view',
-                })}
-                indexPatternId={dataView?.id || ''}
-                onChange={async (dataViewId?: string) => {
-                  if (dataViewId) {
-                    const newDataView = await data.dataViews.get(dataViewId);
-                    setDataView(newDataView);
-                  } else {
-                    setDataView(undefined);
-                  }
-                }}
-                isClearable={false}
-                data-test-subj="dataViewSelector"
-              />
+              <EuiFormFieldset legend={{ children: 'Remote Clusters' }}>
+                {remoteInfo?.map(makeSwith, this)}
+              </EuiFormFieldset>
             </EuiFlexItem>
-            <EuiFlexItem>
-              {showSwitch(dataView)}
-            </EuiFlexItem>
-            <EuiFlexItem>
-              <EuiButton type="primary" size="s" onClick={onSearchHandled}>
-                Search data
-              </EuiButton>
-            </EuiFlexItem>
-          </EuiFlexGrid>
-          <EuiFlexGrid columns={1} >
-            {JSON.stringify(hits,null,2)}
           </EuiFlexGrid>
         </EuiPageContentBody>
       </EuiPageContent>

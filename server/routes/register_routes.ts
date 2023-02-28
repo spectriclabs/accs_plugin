@@ -5,11 +5,10 @@
  * in compliance with, at your election, the Elastic License 2.0 or the Server
  * Side Public License, v 1.
  */
-
-import type { IRouter } from 'kibana/server';
+import type { IRouter } from 'src/core/server';
 import { DataRequestHandlerContext } from 'src/plugins/data/server';
-import { registerServerSearchRoute } from './server_search_route';
+import { registerServerGetRemoteRoute } from './get_route';
 
 export function registerRoutes(router: IRouter<DataRequestHandlerContext>) {
-  registerServerSearchRoute(router);
+  registerServerGetRemoteRoute(router);
 }

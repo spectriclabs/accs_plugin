@@ -1,37 +1,30 @@
 /*
  * Copyright Elasticsearch B.V. and/or licensed to Elasticsearch B.V. under one
  * or more contributor license agreements. Licensed under the Elastic License
- * 2.0; you may not use this file except in compliance with the Elastic License
- * 2.0.
+ * 2.0 and the Server Side Public License, v 1; you may not use this file except
+ * in compliance with, at your election, the Elastic License 2.0 or the Server
+ * Side Public License, v 1.
  */
 
-import { IRouter, RequestHandler } from '@kbn/core/server';
-import { SERVER_SEARCH_ROUTE_PATH } from '../../common';
+import type { DataRequestHandlerContext } from 'src/plugins/data/server';
+import type { IRouter } from 'src/core/server';
+import { RemoteInfo, SERVER_REMOTE_INFO_ROUTE_PATH } from '../../common';
 
-export interface RouteDependencies { 
-   router: IRouter; 
-  }
-export const register = (deps: RouteDependencies): void => {
-  const {
-    router,
-
-  } = deps;
-
-  const allHandler: RequestHandler<unknown, unknown, unknown> = async (ctx, request, response) => {
-    try {
-      const { client: clusterClient } = (await ctx.core).elasticsearch;
-      const info = await clusterClient.asCurrentUser.cluster.remoteInfo();
-      return response.ok({body:info})
-    } catch (error) {
-      return response.badRequest({ body:"error" });
-    }
-  };
-
+export function registerServerGetRemoteRoute(router: IRouter<DataRequestHandlerContext>) {
   router.get(
     {
-      path: SERVER_SEARCH_ROUTE_PATH,
-      validate: false,
+      path: SERVER_REMOTE_INFO_ROUTE_PATH,
+      validate: false
+
     },
-   allHandler
+    async (context, request, response) => {
+
+      const { client: clusterClient } = (await context.core).elasticsearch;      
+      const info = await clusterClient.asCurrentUser.cluster.remoteInfo();   
+      let infoArray:RemoteInfo[] = Object.keys(info).map(name => ({name,connected:info[name].connected}))
+      return response.ok({body:infoArray})
+      
+    }
   );
-};
+}
+

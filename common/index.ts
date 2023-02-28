@@ -9,4 +9,23 @@
 export const PLUGIN_ID = 'ccsFilters';
 export const PLUGIN_NAME = 'CCS Filters';
 
-export const SERVER_SEARCH_ROUTE_PATH = '/api/ccsFilters';
+export const SERVER_REMOTE_INFO_ROUTE_PATH = '/api/ccsFilters/remote/info';
+
+/**
+ * Typed defined for storing reduce information of each remote cluster information   
+ * Examples:
+ * { name: cluster1,
+ *   connected: true
+ * }
+ * 
+ */
+export interface RemoteInfo { name: string; connected: boolean; };
+
+/**
+ * Typed defined for mapping the remote cluster name and its selected state
+ * Example:
+ * {
+ *   cluster1: true
+ * }
+ */
+export interface IsRemoteSelected { [key:string]: boolean};
