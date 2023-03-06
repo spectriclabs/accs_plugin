@@ -19,7 +19,11 @@ import {
   EuiFlexItem,
   EuiSpacer,
   EuiFormFieldset,
-  EuiSwitch
+  EuiFormRow,
+  EuiSwitch,
+  E,
+  EuiToolTip,
+  EuiIcon
 } from '@elastic/eui';
 
 import { UnifiedSearchPublicPluginStart } from '@kbn/unified-search-plugin/public';
@@ -108,6 +112,23 @@ export const CcsFiltersApp = ({
 
   }, [selectedRemotes])
 
+  function renderGreenCheckMark() {
+    return (
+
+      <EuiToolTip content="Cluster is Connected">
+        <EuiIcon type="check" aria-label="check" color='green' />
+      </EuiToolTip>
+    )
+  }
+
+  function renderRedCrossMark() {
+    return (
+      <EuiToolTip content="Cluster is Not Connected">
+        <EuiIcon type="cross" aria-label="cross" color='red' />
+      </EuiToolTip>
+    )
+  }
+
   /**
    * Function use to genere a switch based on the RemoteInfo passed in 
    * @param obj RemoteInfo object use to generate the selection switch 
@@ -117,10 +138,16 @@ export const CcsFiltersApp = ({
     return (
       <div>
         <EuiSwitch
-          label={obj.name}
+          label={
+            <span>
+              {obj.name + ' '}
+              {obj.connected ? renderGreenCheckMark() : renderRedCrossMark()}
+            </span>
+          }
           id={obj.name}
           onChange={e => onChange(e, obj.name)}
-          checked={selectedRemotes? selectedRemotes[obj.name] : false}
+          checked={selectedRemotes ? selectedRemotes[obj.name] : false}
+          compressed={true}
         />
         <EuiSpacer size="s" />
       </div>
