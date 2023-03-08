@@ -7,8 +7,6 @@
  */
 
 import {
-  AppMountParameters,
-  AppNavLinkStatus,
   CoreSetup,
   CoreStart,
   Plugin,
@@ -19,7 +17,6 @@ import {
   ccsFiltersPluginSetup,
   ccsFiltersPluginStart,
 } from './types';
-import { PLUGIN_NAME } from '../common';
 import { IEsSearchRequest } from '@kbn/data-plugin/common';
 export class ccsFiltersPlugin
   implements
@@ -67,19 +64,16 @@ export class ccsFiltersPlugin
     }
     register()
 
-    core.application.register({
-      id: 'ccsFilters',
-      title: PLUGIN_NAME,
-      navLinkStatus: AppNavLinkStatus.visible,
-      mount: async (params: AppMountParameters) => {
-        // Load application bundle
-        const { renderApp } = await import('./application');
-        // Get start services as specified in kibana.json
-        const [coreStart, depsStart] = await core.getStartServices();
-
-        return renderApp(coreStart, depsStart, params);
-      },
-    });
+    // Register an application into the side navigation menu    
+    let replaceSearchBar = async ()=>{
+      // Load application bundle        
+      const { renderApp } = await import('./application');        
+      // Get start services as specified in kibana.json        
+      const [coreStart, depsStart] = await core.getStartServices();
+      let deps:AppPluginStartDependencies = depsStart as AppPluginStartDependencies
+      deps.unifiedSearch.ui.AggregateQuerySearchBar = renderApp(coreStart, depsStart,deps.unifiedSearch.ui.AggregateQuerySearchBar);
+    }
+    replaceSearchBar();
     return {};
   }
 

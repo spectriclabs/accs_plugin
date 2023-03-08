@@ -7,30 +7,24 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { FormattedMessage } from '@kbn/i18n-react';
 
 import {
-  EuiPageBody,
-  EuiPageContent,
-  EuiPageContentBody,
-  EuiPageHeader,
-  EuiTitle,
-  EuiFlexGrid,
   EuiFlexItem,
   EuiSpacer,
   EuiFormFieldset,
-  EuiFormRow,
   EuiSwitch,
-  E,
   EuiToolTip,
-  EuiIcon
+  EuiIcon,
+  EuiPopover,
+  EuiButtonIcon
+
 } from '@elastic/eui';
 
 import { UnifiedSearchPublicPluginStart } from '@kbn/unified-search-plugin/public';
 import { CoreStart } from '../../../../src/core/public';
 import { NavigationPublicPluginStart } from '../../../../src/plugins/navigation/public';
 
-import { IsRemoteSelected, PLUGIN_NAME, RemoteInfo, SERVER_REMOTE_INFO_ROUTE_PATH } from '../../common';
+import { IsRemoteSelected, RemoteInfo, SERVER_REMOTE_INFO_ROUTE_PATH } from '../../common';
 
 import { DataPublicPluginStart } from '../../../../src/plugins/data/public';
 
@@ -49,9 +43,10 @@ export const CcsFiltersApp = ({
   data,
   unifiedSearch,
 }: CcsFiltersAppDeps) => {
-
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   var [selectedRemotes, setSelected] = useState<IsRemoteSelected>({});
   const [remoteInfo, setRemoteInfo] = useState<RemoteInfo[]>();
+  const[isSelectedButNotConnected, setIselectedButNotConnected]=useState(false)
 
   /**
    * Chages the state of the switch when clicked 
@@ -112,6 +107,19 @@ export const CcsFiltersApp = ({
 
   }, [selectedRemotes])
 
+  /**
+   * Check if a cluster that is not connected is seleted. This is use for setting the color of the Icon Button 
+   */
+  useEffect(()=>{
+    let selNotCon = false;
+    remoteInfo?.map(o => {        
+      if(!o.connected && selectedRemotes[o.name]){               
+        selNotCon= true      
+      }    
+    })
+    setIselectedButNotConnected(selNotCon);
+  },[selectedRemotes])
+
   function renderGreenCheckMark() {
     return (
 
@@ -156,29 +164,32 @@ export const CcsFiltersApp = ({
   }
 
   return (
-    <EuiPageBody>
-      <EuiPageHeader>
-        <EuiTitle size="l">
-          <h1>
-            <FormattedMessage
-              id="ccsFilters.helloWorldText"
-              defaultMessage="{name}"
-              values={{ name: PLUGIN_NAME }}
-            />
-          </h1>
-        </EuiTitle>
-      </EuiPageHeader>
-      <EuiPageContent>
-        <EuiPageContentBody>
-          <EuiFlexGrid columns={4}>
-            <EuiFlexItem>
-              <EuiFormFieldset legend={{ children: 'Remote Clusters' }}>
-                {remoteInfo?.map(makeSwith, this)}
-              </EuiFormFieldset>
-            </EuiFlexItem>
-          </EuiFlexGrid>
-        </EuiPageContentBody>
-      </EuiPageContent>
-    </EuiPageBody>
+    <div style={{float: "left", padding: 8}}>
+    <EuiPopover
+      panelPaddingSize='s'
+      isOpen={isPopoverOpen}
+      closePopover={() => { setIsPopoverOpen(false); } }
+      button={
+        <EuiToolTip content="Cross Cluster Selection"> 
+          <EuiButtonIcon
+            onClick={() => { setIsPopoverOpen(!isPopoverOpen); } }
+            color={isSelectedButNotConnected ? 'danger': 'primary'}
+            display="base"
+            size='m'
+            iconType="globe"
+            aria-label='Globe'
+          />
+        </EuiToolTip>
+      }
+    >
+      <EuiFlexItem>
+        <EuiFormFieldset legend={{ children: 'Remote Clusters' }}> 
+          {remoteInfo?.map(makeSwith, this)}      
+        </EuiFormFieldset>    
+      </EuiFlexItem>
+    </EuiPopover>
+    
+    </div>
+
   );
 };

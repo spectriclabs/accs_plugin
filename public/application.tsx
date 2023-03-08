@@ -7,29 +7,27 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { AppMountParameters, CoreStart } from '../../../src/core/public';
+import { CoreStart } from '../../../src/core/public';
 import { AppPluginStartDependencies } from './types';
-import { CcsFiltersApp } from './search/app';
+import { CcsFiltersApp } from './cluster_select/app';
 
 export const renderApp = (
-  { notifications, savedObjects, http, application }: CoreStart,
+  { notifications, http }: CoreStart,
   { data, navigation, unifiedSearch }: AppPluginStartDependencies,
-  { element, history }: AppMountParameters
+  SearchBar:any
 ) => {
-  ReactDOM.render(
-    <CcsFiltersApp
-      notifications={notifications}
-      navigation={navigation}
-      data={data}
-      http={http}
-      unifiedSearch={unifiedSearch}
-    />,
-    element
-  );
-
-  return () => {
-    data.search.session.clear();
-    ReactDOM.unmountComponentAtNode(element);
-  };
+    return function(props:any){
+      return <div>
+        <span>
+          <CcsFiltersApp      
+          notifications={notifications}      
+          navigation={navigation}      
+          data={data}      
+          http={http}      
+          unifiedSearch={unifiedSearch}    
+          />
+        </span>
+        <SearchBar {...props}/>
+      </div>
+    }
 };
