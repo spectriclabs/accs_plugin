@@ -45,13 +45,16 @@ export class ccsFiltersPlugin
           return;
         }
         let title = (request.params?.index as string);
+        let splitIndex = title.split(":")
         let indexPatternArray = [];
-        if (title?.startsWith('*:')) {
-          const indexPostfix = title.split('*:')[1];
-
+        if(splitIndex.length >= 1 && splitIndex[0].endsWith("*")){
+          let regStartCluster = splitIndex[0].split("*")[0];
+          const indexPostfix = splitIndex[1];
           for (const key in SELECTED_REMOTES) {
             if (SELECTED_REMOTES[key]) {
-              indexPatternArray.push(key + ":" + indexPostfix);
+              if(key.startsWith(regStartCluster) ){
+                indexPatternArray.push(key + ":" + indexPostfix);
+              }        
             }
           }
           if (indexPatternArray.length != 0) {
