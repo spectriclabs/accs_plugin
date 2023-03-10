@@ -164,7 +164,7 @@ export const CcsFiltersApp = ({
   }
 
   return (
-    <div style={{float: "left", padding: 8}}>
+    <div >
     <EuiPopover
       panelPaddingSize='s'
       isOpen={isPopoverOpen}

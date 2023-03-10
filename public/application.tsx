@@ -17,8 +17,8 @@ export const renderApp = (
   SearchBar:any
 ) => {
     return function(props:any){
-      return <div>
-        <span>
+      return <div className='searchAndPopover'>
+        <div className='clusterPopover'>
           <CcsFiltersApp      
           notifications={notifications}      
           navigation={navigation}      
@@ -26,8 +26,11 @@ export const renderApp = (
           http={http}      
           unifiedSearch={unifiedSearch}    
           />
-        </span>
-        <SearchBar {...props}/>
+        </div>
+        <div className='searchBarWrapper'>
+          <SearchBar {...props}/>
+        </div>
+
       </div>
     }
 };

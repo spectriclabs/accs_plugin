@@ -1,6 +1,6 @@
 # Cross Cluster Search (CCS) Plugin 
 
-Plugin requieres minimum Kibana 8.4.3 
+Plugin requieres minimum Kibana 8.6.2
 
 ## Setting Up Kibana for developing 
 1. Clone the Kibana Repository 

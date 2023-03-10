@@ -1,6 +1,12 @@
-@import '@elastic/eui/src/global_styling/variables/header';
+.searchAndPopover{
+  display: flex;
+}
 
-.searchExampleStepDsc {
-  padding-left: $euiSizeXL;
-  font-style: italic;
+.clusterPopover {
+  padding: 8px;
+  border-bottom: 1px solid rgb(211, 218, 230);
+}
+
+.searchBarWrapper {
+  flex-grow: 1;
 }
