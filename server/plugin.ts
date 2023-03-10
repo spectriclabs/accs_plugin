@@ -17,20 +17,20 @@ import type {
 import type { DataRequestHandlerContext } from 'src/plugins/data/server';
 
 import {
-  ccsFiltersPluginSetup,
-  ccsFiltersPluginStart,
-  ccsFiltersPluginSetupDeps,
-  ccsFiltersPluginStartDeps,
+  accsPluginSetup,
+  accsPluginStart,
+  accsPluginSetupDeps,
+  accsPluginStartDeps,
 } from './types';
 import { registerRoutes } from './routes';
 
-export class ccsFiltersPlugin
+export class accsPlugin
   implements
     Plugin<
-      ccsFiltersPluginSetup,
-      ccsFiltersPluginStart,
-      ccsFiltersPluginSetupDeps,
-      ccsFiltersPluginStartDeps
+      accsPluginSetup,
+      accsPluginStart,
+      accsPluginSetupDeps,
+      accsPluginStartDeps
     >
 {
   private readonly logger: Logger;
@@ -40,10 +40,10 @@ export class ccsFiltersPlugin
   }
 
   public setup(
-    core: CoreSetup<ccsFiltersPluginStartDeps>,
-    deps: ccsFiltersPluginSetupDeps
+    core: CoreSetup<accsPluginStartDeps>,
+    deps: accsPluginSetupDeps
   ) {
-    this.logger.debug('CCS filter server: Setup');
+    this.logger.debug('Advance CCS server: Setup');
     const router = core.http.createRouter<DataRequestHandlerContext>();
 
     core.getStartServices().then(([_, depsStart]) => {
@@ -54,7 +54,7 @@ export class ccsFiltersPlugin
   }
 
   public start(core: CoreStart) {
-    this.logger.debug('CCS filter server: Started');
+    this.logger.debug('Advance CCS server: Started');
     return {};
   }
 

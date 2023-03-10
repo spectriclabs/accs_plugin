@@ -9,7 +9,7 @@
 import React from 'react';
 import { CoreStart } from '../../../src/core/public';
 import { AppPluginStartDependencies } from './types';
-import { CcsFiltersApp } from './cluster_select/app';
+import { AccsApp } from './cluster_select/app';
 
 export const renderApp = (
   { notifications, http }: CoreStart,
@@ -19,7 +19,7 @@ export const renderApp = (
     return function(props:any){
       return <div className='searchAndPopover'>
         <div className='clusterPopover'>
-          <CcsFiltersApp      
+          <AccsApp      
           notifications={notifications}      
           navigation={navigation}      
           data={data}      

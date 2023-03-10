@@ -1,7 +1,7 @@
 {
-  "prefix": "ccsFilters",
+  "prefix": "accsPlugin",
   "paths": {
-    "cssFilters": "."
+    "acssPlugin": "."
   },
   "translations": ["translations/ja-JP.json"]
 }

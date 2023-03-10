@@ -1,4 +1,4 @@
-# Cross Cluster Search (CCS) Plugin 
+# Advance Cross Cluster Search (CCS) Plugin 
 
 Plugin requieres minimum Kibana 8.6.2
 
@@ -9,7 +9,7 @@ Plugin requieres minimum Kibana 8.6.2
     ```
 2. Checkout the version of kibana needed 
     ```
-    git checkout v8.4.3
+    git checkout v8.6.2
     ```
 3. See the [kibana Getting started guide](https://www.elastic.co/guide/en/kibana/master/development-getting-started.html) for instructions setting up your development environment
 
@@ -19,7 +19,7 @@ Clone the repository into kibana/plugins/ directory
 
   ```
   cd kibana/plugins/
-  git clone https://gitlab.spectric.com/kibana-plugins/ccs-filters.git
+  git clone https://gitlab.spectric.com/acecard/accs_plugin.git
   ```
 
 ## Scripts

@@ -28,7 +28,7 @@ import { IsRemoteSelected, RemoteInfo, SERVER_REMOTE_INFO_ROUTE_PATH } from '../
 
 import { DataPublicPluginStart } from '../../../../src/plugins/data/public';
 
-interface CcsFiltersAppDeps {
+interface AccsAppDeps {
   notifications: CoreStart['notifications'];
   http: CoreStart['http'];
   navigation: NavigationPublicPluginStart;
@@ -36,13 +36,13 @@ interface CcsFiltersAppDeps {
   unifiedSearch: UnifiedSearchPublicPluginStart;
 }
 
-export const CcsFiltersApp = ({
+export const AccsApp = ({
   http,
   notifications,
   navigation,
   data,
   unifiedSearch,
-}: CcsFiltersAppDeps) => {
+}: AccsAppDeps) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   var [selectedRemotes, setSelected] = useState<IsRemoteSelected>({});
   const [remoteInfo, setRemoteInfo] = useState<RemoteInfo[]>();

@@ -12,9 +12,9 @@ import { DataPublicPluginStart } from '../../../src/plugins/data/public';
 import { SharePluginSetup } from '../../../src/plugins/share/public';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ccsFiltersPluginSetup {}
+export interface accsPluginSetup {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ccsFiltersPluginStart {}
+export interface accsPluginStart {}
 
 export interface AppPluginSetupDependencies {
   share: SharePluginSetup;

@@ -14,15 +14,15 @@ import {
 import {
   AppPluginSetupDependencies,
   AppPluginStartDependencies,
-  ccsFiltersPluginSetup,
-  ccsFiltersPluginStart,
+  accsPluginSetup,
+  accsPluginStart,
 } from './types';
 import { IEsSearchRequest } from '@kbn/data-plugin/common';
-export class ccsFiltersPlugin
+export class accsPlugin
   implements
   Plugin<
-  ccsFiltersPluginSetup,
-  ccsFiltersPluginStart,
+  accsPluginSetup,
+  accsPluginStart,
   AppPluginSetupDependencies,
   AppPluginStartDependencies
   >
@@ -30,7 +30,7 @@ export class ccsFiltersPlugin
   public setup(
     core: CoreSetup<AppPluginStartDependencies>,
     { share }: AppPluginSetupDependencies
-  ): ccsFiltersPluginSetup {
+  ): accsPluginSetup {
     // Register PreSearchHook when the plugin gets register 
     var register = async () => {
       const [, depsStart] = await core.getStartServices();
@@ -80,7 +80,7 @@ export class ccsFiltersPlugin
     return {};
   }
 
-  public start(core: CoreStart): ccsFiltersPluginStart {
+  public start(core: CoreStart): accsPluginStart {
     return {};
   }
 

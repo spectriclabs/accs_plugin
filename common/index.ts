@@ -6,10 +6,10 @@
  * Side Public License, v 1.
  */
 
-export const PLUGIN_ID = 'ccsFilters';
-export const PLUGIN_NAME = 'CCS Filters';
+export const PLUGIN_ID = 'accsPlugin';
+export const PLUGIN_NAME = 'Advance CCS Plugin';
 
-export const SERVER_REMOTE_INFO_ROUTE_PATH = '/api/ccsFilters/remote/info';
+export const SERVER_REMOTE_INFO_ROUTE_PATH = '/api/accsPlugin/remote/info';
 
 /**
  * Typed defined for storing reduce information of each remote cluster information   
