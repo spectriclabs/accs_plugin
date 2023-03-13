@@ -20,7 +20,7 @@ export function registerServerGetRemoteRoute(router: IRouter<DataRequestHandlerC
     async (context, request, response) => {
 
       const { client: clusterClient } = (await context.core).elasticsearch;      
-      const info = await clusterClient.asCurrentUser.cluster.remoteInfo();   
+      const info = await clusterClient.asInternalUser.cluster.remoteInfo();   
       let infoArray:RemoteInfo[] = Object.keys(info).map(name => ({name,connected:info[name].connected}))
       return response.ok({body:infoArray})
       
