@@ -10,12 +10,14 @@ import {
   CoreSetup,
   CoreStart,
   Plugin,
+  PluginInitializerContext
 } from '../../../src/core/public';
 import {
   AppPluginSetupDependencies,
   AppPluginStartDependencies,
   accsPluginSetup,
   accsPluginStart,
+  ClientConfigType
 } from './types';
 import { IEsSearchRequest } from '@kbn/data-plugin/common';
 export class accsPlugin
@@ -27,10 +29,19 @@ export class accsPlugin
   AppPluginStartDependencies
   >
 {
+  constructor(private readonly initializerContext: PluginInitializerContext) {}
   public setup(
     core: CoreSetup<AppPluginStartDependencies>,
     { share }: AppPluginSetupDependencies
   ): accsPluginSetup {
+    const {      
+      ui: { 
+        enabled: isAccsUiEnabled },    
+      } = this.initializerContext.config.get<ClientConfigType>();
+      //if plugin is not enable don't load anything 
+      if(!isAccsUiEnabled){
+        return {};
+      }
     // Register PreSearchHook when the plugin gets register 
     var register = async () => {
       const [, depsStart] = await core.getStartServices();

@@ -23,6 +23,7 @@ import {
   accsPluginStartDeps,
 } from './types';
 import { registerRoutes } from './routes';
+import { ACCSConfig } from '.';
 
 export class accsPlugin
   implements
@@ -34,9 +35,11 @@ export class accsPlugin
     >
 {
   private readonly logger: Logger;
+  config$: ACCSConfig;
 
   constructor(initializerContext: PluginInitializerContext) {
     this.logger = initializerContext.logger.get();
+    this.config$ = initializerContext.config.create<ACCSConfig>();
   }
 
   public setup(

@@ -25,3 +25,10 @@ export interface AppPluginStartDependencies {
   data: DataPublicPluginStart;
   unifiedSearch: UnifiedSearchPublicPluginStart;
 }
+
+
+export interface ClientConfigType {    
+  ui: {        
+    enabled: boolean;    
+  };
+}

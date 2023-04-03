@@ -6,8 +6,30 @@
  * Side Public License, v 1.
  */
 
+import { schema, TypeOf } from '@kbn/config-schema';
 import { PluginInitializerContext } from '../../../src/core/server';
+import { PluginConfigDescriptor } from '@kbn/core/server';
 import { accsPlugin } from './plugin';
+
+const configSchema = schema.object(
+  {
+    ui: schema.object({
+      enabled: schema.boolean({ defaultValue: true }),
+    }),
+  },
+  { defaultValue: undefined }
+);
+
+export type ACCSConfig = TypeOf<typeof configSchema>;
+
+export const config: PluginConfigDescriptor<ACCSConfig> = {
+  exposeToBrowser: {
+    ui: true,
+  },
+  schema: configSchema,
+  deprecations: () => [],
+};
+
 
 export function plugin(initializerContext: PluginInitializerContext) {
   return new accsPlugin(initializerContext);

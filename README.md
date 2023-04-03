@@ -22,6 +22,12 @@ Clone the repository into kibana/plugins/ directory
   git clone https://gitlab.spectric.com/acecard/accs_plugin.git
   ```
 
+## Configuration 
+The plugin is enable by default. If you wish to disable it, add the following config to kibana.yml 
+
+```yaml
+accsPlugin.ui.enabled: false
+```
 ## Scripts
 
 <dl>

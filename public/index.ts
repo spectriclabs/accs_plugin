@@ -6,13 +6,14 @@
  * Side Public License, v 1.
  */
 
+import { PluginInitializerContext } from '@kbn/core/public';
 import './index.scss';
 
 import { accsPlugin } from './plugin';
 
 // This exports static code and TypeScript types,
 // as well as, Kibana Platform `plugin()` initializer.
-export function plugin() {
-  return new accsPlugin();
+export function plugin(initializerContext: PluginInitializerContext) {
+  return new accsPlugin(initializerContext);
 }
 export type { accsPluginSetup, accsPluginStart } from './types';

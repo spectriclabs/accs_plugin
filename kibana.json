@@ -5,6 +5,7 @@
   "owner": {
     "name": "Tatiana Cronin"
   },
+  "configPath": ["accsPlugin"],
   "description": "Displays the different remote clusters and allows user to choose which one they want to include in their query",
   "server": true,
   "ui": true,
