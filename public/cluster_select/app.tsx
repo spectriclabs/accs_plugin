@@ -118,7 +118,7 @@ export const AccsApp = ({
       }    
     })
     setIselectedButNotConnected(selNotCon);
-  },[selectedRemotes])
+  },[selectedRemotes,remoteInfo])
 
   function renderGreenCheckMark() {
     return (
