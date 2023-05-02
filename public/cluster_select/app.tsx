@@ -16,7 +16,9 @@ import {
   EuiToolTip,
   EuiIcon,
   EuiPopover,
-  EuiButtonIcon
+  EuiButtonIcon,
+  useEuiTheme,
+  EuiThemeComputed
 
 } from '@elastic/eui';
 
@@ -34,6 +36,7 @@ interface AccsAppDeps {
   navigation: NavigationPublicPluginStart;
   data: DataPublicPluginStart;
   unifiedSearch: UnifiedSearchPublicPluginStart;
+  displayStyle?: 'inPage' | 'detached';
 }
 
 export const AccsApp = ({
@@ -42,6 +45,7 @@ export const AccsApp = ({
   navigation,
   data,
   unifiedSearch,
+  displayStyle
 }: AccsAppDeps) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   var [selectedRemotes, setSelected] = useState<IsRemoteSelected>({});
@@ -163,8 +167,34 @@ export const AccsApp = ({
     )
   }
 
+  const {euiTheme} = useEuiTheme(); 
+
+  const searchBarStyles = ( euiTheme : EuiThemeComputed) => {
+    return {
+      uniSearchBar:{
+        padding: euiTheme.size.s,
+        position: "relative",
+      },
+      default: {
+        padding: euiTheme.size.s,
+        borderBottom: "none",
+      },
+      detached: {
+        padding: euiTheme.size.s, 
+        borderBottom: euiTheme.border.thin,
+      },
+      inPage: {
+        padding: 0,
+    },
+    hidden: {
+        display: 'none'
+    },
+    };
+  };
+  const clusterPopoverStyle =  searchBarStyles(euiTheme)[displayStyle?displayStyle:"default"]
+
   return (
-    <div >
+    <div style={clusterPopoverStyle}>
     <EuiPopover
       panelPaddingSize='s'
       isOpen={isPopoverOpen}

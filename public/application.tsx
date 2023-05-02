@@ -18,13 +18,14 @@ export const renderApp = (
 ) => {
     return function(props:any){
       return <div className='searchAndPopover'>
-        <div className='clusterPopover'>
+        <div>
           <AccsApp      
           notifications={notifications}      
           navigation={navigation}      
           data={data}      
           http={http}      
           unifiedSearch={unifiedSearch}    
+          {...props}
           />
         </div>
         <div className='searchBarWrapper'>
