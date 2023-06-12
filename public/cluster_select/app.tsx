@@ -97,14 +97,18 @@ export const AccsApp = ({
    * Gets the checkedItems save on localstorage once when the application loads
    */
   useEffect(() => {
-    setSelected(JSON.parse((window.localStorage.getItem('selectedRemotes') as string)));
+    const selectedRemotesFromLocalCache = JSON.parse((window.localStorage.getItem('selectedRemotes') as string));
+    if(selectedRemotesFromLocalCache !== null){
+      setSelected(selectedRemotesFromLocalCache);
+    }
   }, []);
 
   /**
    * Save checkedItems to locastorage everytime they are updated
    */
   useEffect(() => {
-    if (selectedRemotes === undefined || selectedRemotes === null || JSON.stringify(selectedRemotes) === '{}') {
+    //if non of the remotes is selected retun without any action
+    if (JSON.stringify(selectedRemotes) === '{}') {
       return;
     }
     window.localStorage.setItem('selectedRemotes', JSON.stringify(selectedRemotes));
@@ -115,8 +119,12 @@ export const AccsApp = ({
    * Check if a cluster that is not connected is seleted. This is use for setting the color of the Icon Button 
    */
   useEffect(()=>{
+    //if non of the remotes is selected retun without any action
+    if (JSON.stringify(selectedRemotes) === '{}') {
+      return;
+    }
     let selNotCon = false;
-    remoteInfo?.map(o => {        
+    remoteInfo?.map(o => {
       if(!o.connected && selectedRemotes[o.name]){               
         selNotCon= true      
       }    
