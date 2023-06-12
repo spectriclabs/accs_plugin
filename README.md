@@ -28,6 +28,12 @@ The plugin is disable by default. If you wish to enable it, add the following co
 ```yaml
 accsPlugin.ui.enabled: true
 ```
+
+## Note
+The plugin when loaded for the first time does not select any of the remote cluster, therefore the search defaults to the regular ElasticSearch behavior.
+
+The same happens when the user manually diselects all clusters.  
+
 ## Scripts
 
 <dl>
