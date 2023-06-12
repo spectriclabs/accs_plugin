@@ -23,10 +23,10 @@ Clone the repository into kibana/plugins/ directory
   ```
 
 ## Configuration 
-The plugin is enable by default. If you wish to disable it, add the following config to kibana.yml 
+The plugin is disable by default. If you wish to enable it, add the following config to kibana.yml 
 
 ```yaml
-accsPlugin.ui.enabled: false
+accsPlugin.ui.enabled: true
 ```
 ## Scripts
 

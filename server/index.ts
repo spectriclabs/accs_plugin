@@ -14,7 +14,7 @@ import { accsPlugin } from './plugin';
 const configSchema = schema.object(
   {
     ui: schema.object({
-      enabled: schema.boolean({ defaultValue: true }),
+      enabled: schema.boolean({ defaultValue: false }),
     }),
   },
   { defaultValue: undefined }
