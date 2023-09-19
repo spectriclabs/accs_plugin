@@ -92,6 +92,18 @@ export const AccsApp = ({
     getCluster()
   }, [])
 
+  /**
+   * Generate selectedRemotes 
+   */
+  useEffect(() => {
+    var selectedR = {};
+    remoteInfo?.forEach(r => {
+      let check = selectedRemotes[r.name] === undefined ? true :selectedRemotes[r.name];
+      console.log("calling setSelected generate useeffect")
+      selectedR[r.name]=check;
+    });
+    setSelected(selectedR);
+  }, [remoteInfo])
 
   /**
    * Gets the checkedItems save on localstorage once when the application loads
@@ -166,7 +178,7 @@ export const AccsApp = ({
           }
           id={obj.name}
           onChange={e => onChange(e, obj.name)}
-          checked={selectedRemotes ? selectedRemotes[obj.name] : false}
+          checked={selectedRemotes[obj.name]}
           compressed={true}
         />
         <EuiSpacer size="s" />
