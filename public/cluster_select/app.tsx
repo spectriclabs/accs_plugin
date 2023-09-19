@@ -50,7 +50,8 @@ export const AccsApp = ({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   var [selectedRemotes, setSelected] = useState<IsRemoteSelected>({});
   const [remoteInfo, setRemoteInfo] = useState<RemoteInfo[]>();
-  const[isSelectedButNotConnected, setIselectedButNotConnected]=useState(false)
+  const[isSelectedButNotConnected, setIselectedButNotConnected]=useState(false);
+  const[isFilteringRemote, setIsFilteringRemote]=useState(false);
 
   /**
    * Chages the state of the switch when clicked 
@@ -99,7 +100,6 @@ export const AccsApp = ({
     var selectedR = {};
     remoteInfo?.forEach(r => {
       let check = selectedRemotes[r.name] === undefined ? true :selectedRemotes[r.name];
-      console.log("calling setSelected generate useeffect")
       selectedR[r.name]=check;
     });
     setSelected(selectedR);
@@ -124,11 +124,10 @@ export const AccsApp = ({
       return;
     }
     window.localStorage.setItem('selectedRemotes', JSON.stringify(selectedRemotes));
-
   }, [selectedRemotes])
 
   /**
-   * Check if a cluster that is not connected is seleted. This is use for setting the color of the Icon Button 
+   * Check if a cluster that is not connected is seleted. This is use for setting the color of the Icon Button to Red
    */
   useEffect(()=>{
     //if non of the remotes is selected retun without any action
@@ -142,6 +141,19 @@ export const AccsApp = ({
       }    
     })
     setIselectedButNotConnected(selNotCon);
+  },[selectedRemotes,remoteInfo])
+
+   /**
+   * Check if a cluster is not seleted. This is use for setting the color of the Icon Button to Yellow
+   */
+   useEffect(()=>{
+     let notSelected = false;
+     remoteInfo?.map(o => {
+      if(!selectedRemotes[o.name]){
+        notSelected= true
+      }
+    });
+    setIsFilteringRemote(notSelected);
   },[selectedRemotes,remoteInfo])
 
   function renderGreenCheckMark() {
@@ -223,7 +235,7 @@ export const AccsApp = ({
         <EuiToolTip content="Cross Cluster Selection"> 
           <EuiButtonIcon
             onClick={() => { setIsPopoverOpen(!isPopoverOpen); } }
-            color={isSelectedButNotConnected ? 'danger': 'primary'}
+            color={isSelectedButNotConnected ? 'danger': isFilteringRemote? 'warning' : 'primary'}
             display="base"
             size='m'
             iconType="globe"
