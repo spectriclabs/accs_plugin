@@ -6,7 +6,7 @@
  * Side Public License, v 1.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { CoreStart } from '../../../src/core/public';
 import { AppPluginStartDependencies } from './types';
 import { AccsApp } from './cluster_select/app';
@@ -17,6 +17,17 @@ export const renderApp = (
   SearchBar:any
 ) => {
     return function(props:any){
+      const[lastquery, setLastQuery]=useState();
+      const onQuerySubmit=(data:any)=>{
+        if(props.onQuerySubmit)
+          props.onQuerySubmit(data)
+          setLastQuery(data)
+        }
+        const onTriggerRefrest = ()=>{
+          if(props.onQuerySubmit){
+            props.onQuerySubmit(lastquery,false)
+          }
+        }
       return <div className='searchAndPopover'>
         <div>
           <AccsApp      
@@ -26,10 +37,11 @@ export const renderApp = (
           http={http}      
           unifiedSearch={unifiedSearch}    
           {...props}
+          onTriggerRefrest={onTriggerRefrest}
           />
         </div>
         <div className='searchBarWrapper'>
-          <SearchBar {...props}/>
+          <SearchBar {...props} onQuerySubmit = {onQuerySubmit}/>
         </div>
 
       </div>

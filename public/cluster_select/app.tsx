@@ -29,23 +29,22 @@ import { NavigationPublicPluginStart } from '../../../../src/plugins/navigation/
 import { IsRemoteSelected, RemoteInfo, SERVER_REMOTE_INFO_ROUTE_PATH } from '../../common';
 
 import { DataPublicPluginStart } from '../../../../src/plugins/data/public';
+import { SearchBarOwnProps } from '@kbn/unified-search-plugin/public/search_bar';
 
-interface AccsAppDeps {
+interface AccsAppDeps extends SearchBarOwnProps {
   notifications: CoreStart['notifications'];
   http: CoreStart['http'];
   navigation: NavigationPublicPluginStart;
   data: DataPublicPluginStart;
   unifiedSearch: UnifiedSearchPublicPluginStart;
   displayStyle?: 'inPage' | 'detached';
+  onTriggerRefrest:any
 }
-
 export const AccsApp = ({
   http,
   notifications,
-  navigation,
-  data,
-  unifiedSearch,
-  displayStyle
+  displayStyle,
+  onTriggerRefrest, 
 }: AccsAppDeps) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   var [selectedRemotes, setSelected] = useState<IsRemoteSelected>({});
@@ -61,6 +60,7 @@ export const AccsApp = ({
   const onChange = (e: { target: { checked: boolean } }, switchLabel: string) => {
 
     setSelected({ ...selectedRemotes, [switchLabel]: e.target.checked });
+    onTriggerRefrest();
 
   }
   /**
@@ -230,11 +230,16 @@ export const AccsApp = ({
     <EuiPopover
       panelPaddingSize='s'
       isOpen={isPopoverOpen}
-      closePopover={() => { setIsPopoverOpen(false); } }
+      closePopover={() => {
+         setIsPopoverOpen(false);
+         
+         } }
       button={
         <EuiToolTip content="Cross Cluster Selection"> 
           <EuiButtonIcon
-            onClick={() => { setIsPopoverOpen(!isPopoverOpen); } }
+            onClick={() => {
+               setIsPopoverOpen(!isPopoverOpen);
+             } }
             color={isSelectedButNotConnected ? 'danger': isFilteringRemote? 'warning' : 'primary'}
             display="base"
             size='m'
