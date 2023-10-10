@@ -39,23 +39,11 @@ export class accsPlugin
         enabled: isAccsUiEnabled },    
       } = this.initializerContext.config.get<ClientConfigType>();
       //if plugin is not enable don't load anything 
-      if(!isAccsUiEnabled){
-        return {};
-      }
-    // Register PreSearchHook when the plugin gets register 
-    var register = async () => {
-      const [, depsStart] = await core.getStartServices();
-      let { data } = depsStart;
-      /**   
-       *  Setups a hook to intercept global search request and change the cross cluster search index   
-       *  base on the enable cluster selected by the user   
-       */
-      data.search.searchInterceptor.addPreSearchHook(function (request: IEsSearchRequest) {
-        var SELECTED_REMOTES = { ...JSON.parse((window.localStorage.getItem('selectedRemotes') as string)) };
-        if (request === undefined || request.params === undefined) {
-          return;
+      const getIndexPatterns = function(title:string){
+        if(!isAccsUiEnabled){
+          return title
         }
-        let title = (request.params?.index as string);
+        var SELECTED_REMOTES = { ...JSON.parse((window.localStorage.getItem('selectedRemotes') as string)) };
         let splitIndex = title.split(":")
         let indexPatternArray = [];
         if(splitIndex.length >= 1 && splitIndex[0].endsWith("*")){
@@ -72,23 +60,45 @@ export class accsPlugin
             title = indexPatternArray.join();
           }
         }
-        request.params.index = title;
-        return request;
-      });
-    }
-    register()
+        return title
+      }
+      if(isAccsUiEnabled){
+       
 
-    // Register an application into the side navigation menu    
-    let replaceSearchBar = async ()=>{
-      // Load application bundle        
-      const { renderApp } = await import('./application');        
-      // Get start services as specified in kibana.json        
-      const [coreStart, depsStart] = await core.getStartServices();
-      let deps:AppPluginStartDependencies = depsStart as AppPluginStartDependencies
-      deps.unifiedSearch.ui.AggregateQuerySearchBar = renderApp(coreStart, depsStart,deps.unifiedSearch.ui.AggregateQuerySearchBar);
+      // Register PreSearchHook when the plugin gets register 
+      var register = async () => {
+        const [, depsStart] = await core.getStartServices();
+        let { data } = depsStart;
+        /**   
+         *  Setups a hook to intercept global search request and change the cross cluster search index   
+         *  base on the enable cluster selected by the user   
+         */
+        data.search.searchInterceptor.addPreSearchHook(function (request: IEsSearchRequest) {
+          if (request === undefined || request.params === undefined) {
+            return;
+          }
+          let title = (request.params?.index as string);
+          title = getIndexPatterns(title)
+          request.params.index = title;
+          return request;
+        });
+      }
+      register()
+
+      // Register an application into the side navigation menu    
+      let replaceSearchBar = async ()=>{
+        // Load application bundle        
+        const { renderApp } = await import('./application');        
+        // Get start services as specified in kibana.json        
+        const [coreStart, depsStart] = await core.getStartServices();
+        let deps:AppPluginStartDependencies = depsStart as AppPluginStartDependencies
+        deps.unifiedSearch.ui.AggregateQuerySearchBar = renderApp(coreStart, depsStart,deps.unifiedSearch.ui.AggregateQuerySearchBar);
+      }
+      replaceSearchBar();
     }
-    replaceSearchBar();
-    return {};
+    return {
+      getIndexPatterns //Export interface for others to get the index patterns
+    };
   }
 
   public start(core: CoreStart): accsPluginStart {

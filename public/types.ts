@@ -12,7 +12,9 @@ import { DataPublicPluginStart } from '../../../src/plugins/data/public';
 import { SharePluginSetup } from '../../../src/plugins/share/public';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface accsPluginSetup {}
+export interface accsPluginSetup {
+  getIndexPatterns:(indexPattern:string)=>string
+}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface accsPluginStart {}
 
