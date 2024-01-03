@@ -38,13 +38,13 @@ interface AccsAppDeps extends SearchBarOwnProps {
   data: DataPublicPluginStart;
   unifiedSearch: UnifiedSearchPublicPluginStart;
   displayStyle?: 'inPage' | 'detached';
-  onTriggerRefrest:any
+  onTriggerRefresh:any
 }
 export const AccsApp = ({
   http,
   notifications,
   displayStyle,
-  onTriggerRefrest, 
+  onTriggerRefresh, 
 }: AccsAppDeps) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   var [selectedRemotes, setSelected] = useState<IsRemoteSelected>({});
@@ -60,7 +60,7 @@ export const AccsApp = ({
   const onChange = (e: { target: { checked: boolean } }, switchLabel: string) => {
 
     setSelected({ ...selectedRemotes, [switchLabel]: e.target.checked });
-    onTriggerRefrest();
+    onTriggerRefresh();
 
   }
   /**
@@ -180,7 +180,7 @@ export const AccsApp = ({
    */
   function makeSwith(obj: RemoteInfo) {
     return (
-      <div>
+      <div className={obj.name + 'Swith'} key={obj.name + 'Swith'}>
         <EuiSwitch
           label={
             <span>

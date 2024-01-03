@@ -18,18 +18,20 @@ export const renderApp = (
 ) => {
     return function(props:any){
       const[lastquery, setLastQuery]=useState();
-      const onQuerySubmit=(data:any)=>{
-        if(props.onQuerySubmit)
-          props.onQuerySubmit(data)
-          setLastQuery(data)
+      const onQuerySubmit=(payload: any,isUpdate?: boolean)=>{
+      
+        if(props.onQuerySubmit){
+          props.onQuerySubmit(payload, isUpdate)
+          setLastQuery(payload)
         }
-        const onTriggerRefrest = ()=>{
-          if(props.onQuerySubmit){
-            props.onQuerySubmit(lastquery,false)
-          }
+      }
+      const onTriggerRefresh = ()=>{
+        if(props.onQuerySubmit){
+          props.onQuerySubmit(lastquery, false)
         }
+      }
       return <div className='searchAndPopover'>
-        <div>
+        <div className='accs'>
           <AccsApp      
           notifications={notifications}      
           navigation={navigation}      
@@ -37,13 +39,12 @@ export const renderApp = (
           http={http}      
           unifiedSearch={unifiedSearch}    
           {...props}
-          onTriggerRefrest={onTriggerRefrest}
+          onTriggerRefresh={onTriggerRefresh}
           />
         </div>
         <div className='searchBarWrapper'>
           <SearchBar {...props} onQuerySubmit = {onQuerySubmit}/>
         </div>
-
       </div>
     }
 };
