@@ -47,6 +47,27 @@ export class accsPlugin
     deps: accsPluginSetupDeps
   ) {
     this.logger.debug('Advance CCS server: Setup');
+    const setVersion = (version:string) =>{
+      const name = "acecard:plugin"+ this.constructor.name;
+      const versionSettings:any = {}
+      versionSettings[name] = {
+        name,
+        description: `Commit id and message for ${this.constructor.name} version readonly do not change`,
+        category: ['acecard'],
+        order: 1,
+        type: 'string',
+        value: version,
+        readonly:false,
+        requiresPageReload: false,
+        schema: schema.string(),
+      }
+      core.uiSettings.register(versionSettings);
+    }
+    import("../common/version").then((version)=>{
+      setVersion(version.version)
+    }).catch(()=>{
+      setVersion("UNKNOWN")
+    })
     const router = core.http.createRouter<DataRequestHandlerContext>();
 
     core.getStartServices().then(([_, depsStart]) => {
