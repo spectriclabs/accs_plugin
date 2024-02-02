@@ -24,6 +24,7 @@ import {
 } from './types';
 import { registerRoutes } from './routes';
 import { ACCSConfig } from '.';
+import { schema } from '@kbn/config-schema';
 
 export class accsPlugin
   implements
